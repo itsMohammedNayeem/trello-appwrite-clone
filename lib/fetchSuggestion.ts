@@ -9,7 +9,16 @@ const fetchSuggestions = async (board: Board) => {
     body: JSON.stringify({ todos }),
   });
 
-  const GPTdata = await res.json();
+  if (!res.ok) {
+    throw new Error(`HTTP error! status: ${res.status}`);
+  }
+
+  const text = await res.text();
+  if (!text) {
+    throw new Error("No content received from server");
+  }
+
+  const GPTdata = JSON.parse(text);
   const { content } = GPTdata;
 
   return content;
