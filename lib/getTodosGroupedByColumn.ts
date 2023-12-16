@@ -34,7 +34,7 @@ export const getTodosGroupedByColumn = async () => {
 
   const columnTypes: TypedColumn[] = ["todo", "inprogress", "done"];
 
-  // if columns dooes not have "todo", "inprogress", "done", add them with empty todos to populate a column
+  // if columns does not have "todo", "inprogress", "done", add them with empty todos to populate a column
   for (const columnType of columnTypes) {
     if (!columns.get(columnType)) {
       columns.set(columnType, {

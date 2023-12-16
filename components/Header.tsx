@@ -4,10 +4,31 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { MagnifyingGlassIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import Avatar from "react-avatar";
+import { useBoardStore } from "@/store/BoardStore";
+import fetchSuggestion from "@/lib/fetchSuggestion";
 
 function Header() {
+  const [searchString, setSearchString, board] = useBoardStore((state) => [
+    state.searchString,
+    state.setSearchString,
+    state.board,
+  ]);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [suggestion, setSuggestion] = useState<string>("");
+
+  useEffect(() => {
+    if (board.columns.size === 0) return;
+    setLoading(true);
+
+    const fetchSuggestionFunc = async () => {
+      const suggestion = await fetchSuggestion(board);
+      setSuggestion(suggestion);
+      setLoading(false);
+    };
+
+    fetchSuggestionFunc();
+  }, [board]);
 
   return (
     <header>
@@ -26,7 +47,7 @@ function Header() {
                     -z-50
                     rounded-md
                     filter
-                    blur-3xl
+                    blur-2xl
                 "
         />
         <Image
@@ -44,6 +65,8 @@ function Header() {
             <input
               className="flex-1 outline-none p-2"
               type="text"
+              value={searchString}
+              onChange={(e) => setSearchString(e.target.value)}
               placeholder="Search"
             />
             <button hidden>Search</button>
