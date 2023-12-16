@@ -1,4 +1,5 @@
 import { useBoardStore } from "@/store/BoardStore";
+import { useModalStore } from "@/store/ModalStore";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import TodoCard from "./TodoCard";
@@ -22,10 +23,12 @@ function Column({ id, todos, index }: Props) {
     state.searchString,
     state.setNewTaskType,
   ]);
+  const openModal = useModalStore((state) => state.openModal);
 
   //   Highlight the status based on which Column the user adds a task to
   const handleAddTodo = () => {
     setNewTaskType(id);
+    openModal();
   };
 
   return (
